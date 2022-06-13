@@ -2,8 +2,8 @@ import Component from './component'
 import Icon from './icon'
 
 export default {
-  title: 'Getty Images',
-  name: 'getty-images',
+  title: 'Getty',
+  name: 'getty',
   icon: Icon,
   component: Component
 }

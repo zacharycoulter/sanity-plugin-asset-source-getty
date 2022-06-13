@@ -1,7 +1,23 @@
 {
   "name": "sanity-plugin-asset-source-getty",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "dependencies": {
     "gettyimages-api": "^5.1.0"
-  }
+  },
+  "description": "Add images from Getty right from Sanity Studio",
+  "main": "index.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zacharycoulter/sanity-plugin-asset-source-getty.git"
+  },
+  "author": "Zachary Coulter <zcoulter@spigot.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/zacharycoulter/sanity-plugin-asset-source-getty/issues"
+  },
+  "homepage": "https://github.com/zacharycoulter/sanity-plugin-asset-source-getty#readme"
 }
