@@ -1,0 +1,7 @@
+{
+  "name": "sanity-plugin-asset-source-getty",
+  "version": "1.0.0",
+  "dependencies": {
+    "gettyimages-api": "^5.1.0"
+  }
+}
