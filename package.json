@@ -1,14 +1,31 @@
 {
   "name": "sanity-plugin-asset-source-getty",
-  "version": "1.0.3",
+  "version": "1.0.5",
   "dependencies": {
-    "gettyimages-api": "^5.1.0"
+    "gettyimages-api": "^5.1.0",
+    "@sanity/components": "^0.146.3",
+    "@sanity/core": "^0.146.0",
+    "@sanity/ui": "^0.37.12",
+    "@sanity/default-layout": "^0.146.3",
+    "@sanity/default-login": "^0.146.0",
+    "@sanity/desk-tool": "^0.146.3"
   },
   "description": "Add images from Getty right from Sanity Studio",
-  "main": "index.js",
-  "devDependencies": {},
+  "main": "lib/index.js",
+  "devDependencies": {
+    "@babel/cli": "^7.17.10",
+    "@babel/core": "^7.18.5",
+    "@babel/plugin-external-helpers": "^7.2.0",
+    "@babel/plugin-proposal-class-properties": "^7.3.0",
+    "@babel/plugin-proposal-decorators": "^7.3.0",
+    "@babel/plugin-proposal-export-default-from": "^7.2.0",
+    "@babel/plugin-syntax-dynamic-import": "^7.2.0",
+    "@babel/plugin-transform-runtime": "^7.2.0",
+    "@babel/preset-env": "^7.3.1",
+    "@babel/preset-react": "^7.0.0"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "babel src -d lib"
   },
   "repository": {
     "type": "git",
@@ -19,5 +36,12 @@
   "bugs": {
     "url": "https://github.com/zacharycoulter/sanity-plugin-asset-source-getty/issues"
   },
-  "homepage": "https://github.com/zacharycoulter/sanity-plugin-asset-source-getty#readme"
+  "homepage": "https://github.com/zacharycoulter/sanity-plugin-asset-source-getty#readme",
+  "keywords": [
+    "sanity",
+    "plugin",
+    "images",
+    "getty",
+    "assets"
+  ]
 }
