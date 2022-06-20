@@ -8,6 +8,10 @@
       "name": "part:sanity-plugin-asset-source-getty/image-asset-source",
       "implements": "part:@sanity/form-builder/input/image/asset-source",
       "path": "index.js"
+    },
+    {
+      "name": "part:sanity-plugin-asset-source-getty/hooks",
+      "description": "..."
     }
   ]
 }

@@ -25,7 +25,8 @@
     "@babel/preset-react": "^7.0.0"
   },
   "scripts": {
-    "build": "babel src -d lib"
+    "build": "babel src -d lib",
+    "prepare": "npm run build"
   },
   "repository": {
     "type": "git",

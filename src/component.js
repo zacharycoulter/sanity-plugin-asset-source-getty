@@ -1,7 +1,8 @@
-import React, { useState } from "react"
-import getty from "gettyimages-api"
-import { apiKey, apiSecret } from "config:asset-source-getty"
-import {Dialog, Flex, Select, Card, Inline, TextInput, Button, Stack, Grid, Text} from "@sanity/ui"
+import React, { useState } from "react";
+import getty from "gettyimages-api";
+import { apiKey, apiSecret } from "config:asset-source-getty";
+import hooks from "part:sanity-plugin-asset-source-getty/hooks?";
+import {Dialog, Flex, Select, Card, Inline, TextInput, Button, Stack, Grid, Text} from "@sanity/ui";
 
 const gettyClient = new getty({ apiKey, apiSecret });
 
@@ -41,7 +42,11 @@ function Component(props) {
                     creditLine: image.caption,
                 },
             },
-        ])
+        ]);
+
+        console.log(hooks)
+        if (hooks && Object.keys(hooks).includes('onSelect'))
+            hooks.onSelect(image);
     }
 
     return (
