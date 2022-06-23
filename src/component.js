@@ -1,42 +1,50 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import getty from "gettyimages-api";
 import { apiKey, apiSecret } from "config:asset-source-getty";
 import hooks from "part:sanity-plugin-asset-source-getty/hooks?";
-import {Dialog, Flex, Select, Card, Inline, TextInput, Button, Stack, Grid, Text} from "@sanity/ui";
+import {Dialog, Flex, Select, Card, Inline, TextInput, Button, Stack, Heading, Text} from "@sanity/ui";
 
 const gettyClient = new getty({ apiKey, apiSecret });
 
-const getImages = async (type, query = '', page = 1) => {
+const getImages = async (type, query = '', page = 1, sort = 'newest') => {
     let request = gettyClient;
 
     if (type === 'editorial') request = request.searchimageseditorial();
     if (type === 'creative') request = request.searchimagescreative();
     if (query) request = request.withPhrase(query)
 
-    const { images } = await request.withPage(page).withPageSize(24).execute();
+    const { images } = await request.withPage(page).withPageSize(24).withSortOrder(sort).execute();
+    console.log(images)
     return images;
 }
 
 function Component(props) {
-    let [type, setType] = useState('editorial')
-    let [query, setQuery] = useState('')
-    let [page, setPage] = useState(1)
-    let [images, setImages] = useState([])
-    getImages(type, query, page).then(returned => {
-        setImages(() => returned)
-    })
+    let [type, setType] = useState('editorial');
+    let [sort, setSort] = useState('newest');
+    let [query, setQuery] = useState('');
+    let [page, setPage] = useState(1);
+    let [images, setImages] = useState([]);
+
+    useEffect(() => {
+        getImages(type, query, page, sort).then(returned => setImages(() => returned))
+    }, [])
+    const onSearch = () => getImages(type, query, page, sort).then(returned => setImages(() => returned))
+    const onPageChange = (direction) => {
+        setPage(() => page + direction)
+        getImages(type, query, page, sort).then(returned => setImages(() => returned))
+    }
 
     const handleSelect = (image) => {
         props.onSelect([
             {
                 kind: "url",
-                value: image.display_sizes[0].uri,
+                value: image.display_sizes.at(-1).uri,
                 assetDocumentProps: {
                     originalFilename: `getty-${image.id}.jpg`,
                     source: {
                         source: "getty",
                         id: image.id,
-                        url: image.display_sizes[0].uri,
+                        url: image.display_sizes.at(-1).uri,
                     },
                     description: image.caption,
                     creditLine: image.caption,
@@ -44,7 +52,6 @@ function Component(props) {
             },
         ]);
 
-        console.log(hooks)
         if (hooks && Object.keys(hooks).includes('onSelect'))
             hooks.onSelect(image);
     }
@@ -74,29 +81,59 @@ function Component(props) {
                                 padding={3}
                                 space={2}
                                 name="type"
+                                onChange={(event) => setSort(event.currentTarget.value)}
+                            >
+                                <option value="newest">Newest</option>
+                                <option value="oldest">Oldest</option>
+                                <option value="most_popular">Most Popular</option>
+                                <option value="best">Best</option>=
+                            </Select>
+                        </Stack>
+                        <Stack flex={2} padding={1}>
+                            <Select
+                                fontSize={2}
+                                padding={3}
+                                space={2}
+                                name="type"
                                 onChange={(event) => setType(event.currentTarget.value)}
                             >
                                 <option value="editorial">Editorial</option>
                                 <option value="creative">Creative</option>
                             </Select>
                         </Stack>
+                        <Stack flex={2} padding={1}>
+                            <Button
+                                fontSize={2}
+                                mode="ghost"
+                                padding={3}
+                                text="Search"
+                                onClick={() => onSearch()} />
+                        </Stack>
                     </Flex>
                 </form>
-                <Grid columns={2} gap={1}>
+                <Stack>
                     {images.map((image) => (
-                        <Card
-                            padding={4}
-                            radius={2}
-                            shadow={1}
-                            tone="default"
-                            onClick={() => handleSelect(image)}
-                        >
-                            <img style={{width:'100%',maxHeight:'200px',objectFit:'contain',objectPosition:'center',margin:'0 auto',display:'block'}} src={image.display_sizes[0].uri} />
-                            <br/>
-                            <Text align="center" size={1} weight="semibold">{image.title}</Text>
-                        </Card>
+                        <Flex space={3} style={{marginBottom:'30px',cursor:'pointer'}} onClick={() => handleSelect(image)}>
+                            <Stack flex={2} padding={1}>
+                                <img
+                                    style={{
+                                        display:'block',
+                                        width:'100%',
+                                        maxHeight:'220px',
+                                        margin:'0 auto',
+                                        objectFit: 'contain',
+                                        objectPosition: 'center',
+                                    }}
+                                    src={image.display_sizes[0].uri}
+                                />
+                            </Stack>
+                            <Stack flex={3} padding={1}>
+                                <Heading style={{marginBottom: '15px'}}>{image.title}</Heading>
+                                <Text size={1}>{image.caption}</Text>
+                            </Stack>
+                        </Flex>
                     ))}
-                </Grid>
+                </Stack>
                 <Card padding={2} style={{textAlign: 'center'}}>
                     <Inline space={3}>
                         <Button
@@ -105,14 +142,14 @@ function Component(props) {
                             padding={3}
                             text="Previous"
                             disabled={page === 1}
-                            onClick={() => setPage(page => page - 1)}
+                            onClick={() => onPageChange(-1)}
                         />
                         <Button
                             fontSize={2}
                             mode="ghost"
                             padding={3}
                             text="Next"
-                            onClick={() => setPage(page => page + 1)}
+                            onClick={() => onPageChange(1)}
                         />
                     </Inline>
                 </Card>
