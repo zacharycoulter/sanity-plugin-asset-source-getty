@@ -1,6 +1,6 @@
 {
   "name": "sanity-plugin-asset-source-getty",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "dependencies": {
     "gettyimages-api": "^5.1.0",
     "@sanity/components": "^0.146.3",

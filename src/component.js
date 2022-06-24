@@ -18,6 +18,11 @@ const getImages = async (type, query = '', page = 1, sort = 'newest') => {
     return images;
 }
 
+const getImageUri = async (id) => {
+    const { uri } = await gettyClient.downloadsimages().withId(id).execute();
+    return uri;
+}
+
 function Component(props) {
     let [type, setType] = useState('editorial');
     let [sort, setSort] = useState('newest');
@@ -34,17 +39,18 @@ function Component(props) {
         getImages(type, query, page, sort).then(returned => setImages(() => returned))
     }
 
-    const handleSelect = (image) => {
+    const handleSelect = async (image) => {
+        const uri = await getImageUri(image.id);
         props.onSelect([
             {
                 kind: "url",
-                value: image.display_sizes.at(-1).uri,
+                value: uri,
                 assetDocumentProps: {
                     originalFilename: `getty-${image.id}.jpg`,
                     source: {
                         source: "getty",
                         id: image.id,
-                        url: image.display_sizes.at(-1).uri,
+                        url: uri,
                     },
                     description: image.caption,
                     creditLine: image.caption,
